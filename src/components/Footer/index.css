@@ -1,0 +1,6 @@
+.mainFooter {
+    padding-top: 0 !important;
+    position: fixed !important;
+    bottom: 0px !important;
+    width: 100%;
+}
