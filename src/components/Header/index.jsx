@@ -5,7 +5,7 @@ function Header() {
         <header>
             <nav>
                 <div className="nav-wrapper">
-                    <a href="#" className="brand-logo" style={{paddingLeft: '20px'}}>Cardapio Digital</a>
+                    <a href="/" className="brand-logo" style={{paddingLeft: '20px'}}>Cardapio Digital</a>
 
                 </div>
             </nav>
