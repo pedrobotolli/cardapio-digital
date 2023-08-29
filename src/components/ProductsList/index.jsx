@@ -1,7 +1,15 @@
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {
     useQuery,
 } from '@tanstack/react-query'
+import Loading from '../Loading'
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import { CardActionArea } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2';
+import Container from '@mui/material/Container';
 
 function ProductsList() {
     const { isLoading, error, data } = useQuery({
@@ -10,40 +18,51 @@ function ProductsList() {
             (res) => res.json()
         )
     })
+    const navigate = useNavigate()
 
-    if (isLoading) return 'Loading...'
+    if (isLoading) return <Loading />
 
-    if (error) return 'An error has ocurred: ' + error.message
+    if (error) return 'Aconteceu um erro: ' + error.message
 
 
     return (
         <main>
-            <div className="container">
+            <Container>
+
                 {data.productTypes.map((productType, productTypeIndex) => {
                     return (
                         <div key={productTypeIndex}>
                             <h3>{productType.type}</h3>
-                            <div className="row">
+                            <Grid container spacing={1} >
+
                                 {productType.products.map((product, productIndex) => {
                                     return (
-                                        <div className="col s12 m4" key={''.concat(productTypeIndex, '-', productIndex)}>
-                                            <div className="card small">
-                                                <div className="card-image" style={{ maxHeight: "85%", objectFit: "cover", height: "100%" }}>
-                                                    <img src={product.image} style={{ objectFit: "cover", height: "100%" }} />
-                                                    <span className="card-title grey darken-2">{product.name}</span>
-                                                </div>
-                                                <div className="card-action">
-                                                    <Link to={`/${productType.type}/${product.name}`}>Adicionar ao Carrinho</Link>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <Grid item md={4} key={''.concat(productTypeIndex, '-', productIndex)}>
+                                            <Card sx={{ maxWidth: "100%" }}>
+                                                <CardActionArea onClick={() => navigate(`/${productType.type}/${product.name}`)}>
+
+                                                    <CardMedia
+                                                        component="img"
+                                                        height="140"
+                                                        image={product.image}
+                                                        alt={product.name}
+                                                    />
+                                                    <CardContent>
+                                                        <Typography gutterBottom variant="h4" component="div">
+                                                            {product.name}
+                                                        </Typography>
+                                                    </CardContent>
+
+                                                </CardActionArea>
+                                            </Card>
+                                        </Grid>
                                     )
                                 })}
-                            </div>
+                            </Grid>
                         </div>
                     )
                 })}
-            </div>
+            </Container>
 
         </main>
     )
