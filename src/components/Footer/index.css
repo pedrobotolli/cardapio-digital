@@ -1,6 +1,7 @@
 .mainFooter {
-    padding-top: 0 !important;
+    padding-top: 2px !important;
     position: fixed !important;
     bottom: 0px !important;
     width: 100%;
+    background-color: white;
 }

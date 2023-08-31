@@ -11,12 +11,13 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import Grid from '@mui/material/Unstable_Grid2';
+import { Stack } from '@mui/material'
 
 function ProductDetails() {
   const navigate = useNavigate()
-  const { cart, setCart } = useContext(CartContext)
+  const { addToCart } = useContext(CartContext)
   const [additionalInfo, setAdditionalInfo] = useState('')
   const [quantity, setQuantity] = useState(0)
   const { productType, productName } = useParams()
@@ -32,10 +33,8 @@ function ProductDetails() {
   if (error) return 'An error has ocurred: ' + error.message
 
   let currentProductTypeValues = data.productTypes.filter(obj => obj.type === productType)
-  console.log(currentProductTypeValues)
 
   let currentProductValues = currentProductTypeValues[0].products.filter(obj => {
-    console.log(`${obj} - ${productName}`)
     return obj.name === productName
   })
   console.log(currentProductValues)
@@ -48,35 +47,45 @@ function ProductDetails() {
       quantity: quantity,
       additionalInfo: additionalInfo
     })
-    setCart((prevCart) => [...prevCart,
-    {
+    addToCart({
       productName: productName,
       productType: productType,
-      quantity: quantity,
+      quantity: parseInt(quantity),
       additionalInfo: additionalInfo,
-      price: currentProductValues[0].price
-    }])
-    console.log(cart)
+      price: currentProductValues[0].price,
+      image: currentProductValues[0].image
+    })
     navigate('/')
   }
 
   return (
     <main>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link underline="hover" color="inherit" href="/">
+        <Link underline="hover" color="inherit" onClick={() => navigate("/")}>
           Página Inicial
+        </Link>
+        <Link underline="hover" color="inherit" onClick={() => navigate("/")}>
+          {productType}
         </Link>
         <Typography color="text.primary">{productName}</Typography>
       </Breadcrumbs>
       <Container>
+
         <div>
-          <img src={currentProductValues[0].image} alt={productName} style={{ width: "40vw", height: "50vh", objectFit: "cover" }} />
-          <h1>{productType}</h1>
-          <h2>{productName}</h2>
-          <p>{`Valor unitário: R$ ${currentProductValues[0].price}`}</p>
+          <Grid container spacing={2} sx={{ marginTop: "20px", marginBottom: "20px" }}>
+            <Grid item md={4} sm={12}>
+              <img src={currentProductValues[0].image} alt={productName} style={{ width: "100%", height: "250px", objectFit: "cover" }} />
+            </Grid>
+            <Grid item md={8} sm={12}>
+
+              <h1>{productName}</h1>
+              <p>{`Valor unitário: R$ ${currentProductValues[0].price}`}</p>
+
+            </Grid>
+          </Grid>
           <form method="post" onSubmit={handleSubmit}>
             <Grid container spacing={2}>
-              <Grid xs={8}>
+              <Grid sm={8}>
                 <TextField
                   required
                   id="outlined-number"
@@ -88,12 +97,13 @@ function ProductDetails() {
                   defaultValue={0}
                   onChange={(e) => setQuantity(e.target.value)}
                   style={{ width: "100%" }}
+                  inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                 />
               </Grid>
-              <Grid xs={4}>
+              <Grid sm={4}>
                 <span>Total: R$ {currentProductValues[0].price * quantity}</span>
               </Grid>
-              <Grid xs={12}>
+              <Grid sm={12}>
                 <TextField
                   id="outlined-multiline-flexible"
                   label="Observações"
@@ -104,8 +114,8 @@ function ProductDetails() {
                   style={{ width: "100%" }}
                 />
               </Grid>
-              <Grid xs={4}>
-                <Button variant="contained" type="submit" endIcon={<AddIcon />}>
+              <Grid sm={12}>
+                <Button size='large' variant="contained" type="submit" endIcon={<AddShoppingCartIcon />}>
                   Adicionar ao Carrinho
                 </Button>
               </Grid>

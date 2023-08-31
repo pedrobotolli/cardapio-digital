@@ -15,7 +15,10 @@ function ProductsList() {
     const { isLoading, error, data } = useQuery({
         queryKey: ["allProducts"],
         queryFn: () => fetch('http://localhost:3000/allProducts').then(
-            (res) => res.json()
+            (res) => {
+                if (!res.ok) throw new Error(res);
+                else return res.json();
+            }
         )
     })
     const navigate = useNavigate()
@@ -37,15 +40,15 @@ function ProductsList() {
 
                                 {productType.products.map((product, productIndex) => {
                                     return (
-                                        <Grid item md={4} key={''.concat(productTypeIndex, '-', productIndex)}>
-                                            <Card sx={{ maxWidth: "100%" }}>
+                                        <Grid item md={4} sm={6} key={''.concat(productTypeIndex, '-', productIndex)}>
+                                            <Card sx={{ width: "100%" }}>
                                                 <CardActionArea onClick={() => navigate(`/${productType.type}/${product.name}`)}>
 
                                                     <CardMedia
                                                         component="img"
-                                                        height="140"
                                                         image={product.image}
                                                         alt={product.name}
+                                                        sx={{ width: "360px", height: "260px", objectFit: "cover" }}
                                                     />
                                                     <CardContent>
                                                         <Typography gutterBottom variant="h4" component="div">
