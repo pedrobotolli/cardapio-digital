@@ -13,8 +13,8 @@ import Container from '@mui/material/Container';
 
 function ProductsList() {
     const { isLoading, error, data } = useQuery({
-        queryKey: ["allProducts"],
-        queryFn: () => fetch('http://localhost:3000/allProducts').then(
+        queryKey: ["products"],
+        queryFn: () => fetch('http://localhost:3000/api/products').then(
             (res) => {
                 if (!res.ok) throw new Error(res);
                 else return res.json();

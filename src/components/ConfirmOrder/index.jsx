@@ -8,13 +8,29 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
+import { useMutation } from '@tanstack/react-query';
 
 function ConfirmOrder() {
     const navigate = useNavigate()
     const { cart } = useContext(CartContext)
-    let completeName = ''
-    let telephoneNumber = ''
-    let address = ''
+    const orderProperties = { cart: cart, completeName: '', telephoneNumber: '', address: ''} 
+
+    const submitOrderMutation = useMutation({
+        mutationFn: async () => {
+            const response = await fetch('/api/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(orderProperties)
+            })
+            const data = await response.json()
+            return data
+        },
+        onSuccess: (data) => {
+            navigate(`/OrderConfirmed/${data.id}`)
+        }
+    }) 
 
     return (
         <main>
@@ -34,25 +50,25 @@ function ConfirmOrder() {
                         id="nome"
                         label="Nome Completo"
                         defaultValue={''}
-                        onChange={() => { '' }}
+                        onChange={(e) => orderProperties.completeName = e.target.value}
                         style={{ width: "100%" }}
                     />
                     <TextField
                         id="telefone"
                         label="Telefone"
                         defaultValue={''}
-                        onChange={() => { '' }}
+                        onChange={(e) => orderProperties.telephoneNumber = e.target.value}
                         style={{ width: "100%" }}
                     />
                     <TextField
                         id="endereco"
                         label="Endereço"
                         defaultValue={''}
-                        onChange={() => { '' }}
+                        onChange={(e) => orderProperties.address = e.target.value}
                         style={{ width: "100%" }}
                     />
                     <Stack direction="row" spacing={2} >
-                        <Button variant="contained" size="large" onClick={() => navigate('/')} >Confirmar Pedido</Button>
+                        <Button variant="contained" size="large" onClick={submitOrderMutation.mutate} >Confirmar Pedido</Button>
                         <Button variant="outlined" size="large" onClick={() => navigate('/')} >Voltar para a pagina inicial</Button>
                     </Stack>
                 </Stack>

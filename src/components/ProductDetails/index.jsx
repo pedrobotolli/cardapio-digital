@@ -22,8 +22,8 @@ function ProductDetails() {
   const [quantity, setQuantity] = useState(0)
   const { productType, productName } = useParams()
   const { isLoading, error, data } = useQuery({
-    queryKey: ["allProducts"],
-    queryFn: () => fetch('http://localhost:3000/allProducts').then(
+    queryKey: ["products"],
+    queryFn: () => fetch(`http://localhost:3000/api/products/${productType}/${productName}`).then(
       (res) => res.json()
     )
   })
@@ -31,13 +31,15 @@ function ProductDetails() {
   if (isLoading) return <Loading />
 
   if (error) return 'An error has ocurred: ' + error.message
-
+  
+  /*
   let currentProductTypeValues = data.productTypes.filter(obj => obj.type === productType)
 
   let currentProductValues = currentProductTypeValues[0].products.filter(obj => {
     return obj.name === productName
   })
   console.log(currentProductValues)
+  */
 
   function handleSubmit(e) {
     e.preventDefault()
