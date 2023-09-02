@@ -5,6 +5,7 @@ import ErrorPage from './routes/error-page'
 import ProductsList from './components/ProductsList';
 import ProductDetails from './components/ProductDetails';
 import ConfirmOrder from './components/ConfirmOrder';
+import OrderConfirmed from './components/OrderConfirmed';
 import Cart from './components/Cart';
 import {
   createBrowserRouter,
@@ -34,17 +35,20 @@ const router = createBrowserRouter([
         element: <ProductsList />,
       },
       {
-        path: "/:productType/:productName",
+        path: "/produtos/:productId",
         element: <ProductDetails />
       },
       {
         path: "/carrinho",
         element: <Cart />
-      }
-      ,
+      },
       {
         path: "/confirmar-pedido",
         element: <ConfirmOrder />
+      },
+      {
+        path: "/pedido-confirmado/:orderId",
+        element: <OrderConfirmed />
       }
     ]
   },

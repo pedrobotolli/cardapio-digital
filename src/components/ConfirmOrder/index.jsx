@@ -1,6 +1,6 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import { CartContext } from '../../contexts/CartContext';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import Container from '@mui/material/Container';
@@ -13,11 +13,11 @@ import { useMutation } from '@tanstack/react-query';
 function ConfirmOrder() {
     const navigate = useNavigate()
     const { cart } = useContext(CartContext)
-    const orderProperties = { cart: cart, completeName: '', telephoneNumber: '', address: ''} 
+    const orderProperties = { items: cart, ordererName: '', telephoneNumber: '', address: ''} 
 
     const submitOrderMutation = useMutation({
         mutationFn: async () => {
-            const response = await fetch('/api/orders', {
+            const response = await fetch('http://localhost:8000/api/orders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -28,7 +28,8 @@ function ConfirmOrder() {
             return data
         },
         onSuccess: (data) => {
-            navigate(`/OrderConfirmed/${data.id}`)
+            console.log(data)
+            navigate(`/pedido-confirmado/${data.id}`)
         }
     }) 
 
@@ -50,7 +51,7 @@ function ConfirmOrder() {
                         id="nome"
                         label="Nome Completo"
                         defaultValue={''}
-                        onChange={(e) => orderProperties.completeName = e.target.value}
+                        onChange={(e) => orderProperties.ordererName = e.target.value}
                         style={{ width: "100%" }}
                     />
                     <TextField

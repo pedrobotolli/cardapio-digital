@@ -20,10 +20,10 @@ function ProductDetails() {
   const { addToCart } = useContext(CartContext)
   const [additionalInfo, setAdditionalInfo] = useState('')
   const [quantity, setQuantity] = useState(0)
-  const { productType, productName } = useParams()
+  const { productId } = useParams()
   const { isLoading, error, data } = useQuery({
-    queryKey: ["products"],
-    queryFn: () => fetch(`http://localhost:3000/api/products/${productType}/${productName}`).then(
+    queryKey: ["product"],
+    queryFn: () => fetch(`http://localhost:8000/api/products/${productId}`).then(
       (res) => res.json()
     )
   })
@@ -43,19 +43,13 @@ function ProductDetails() {
 
   function handleSubmit(e) {
     e.preventDefault()
-    console.log({
-      productName: productName,
-      productType: productType,
-      quantity: quantity,
-      additionalInfo: additionalInfo
-    })
     addToCart({
-      productName: productName,
-      productType: productType,
+      productId: data.id,
+      name: data.name,
       quantity: parseInt(quantity),
       additionalInfo: additionalInfo,
-      price: currentProductValues[0].price,
-      image: currentProductValues[0].image
+      price: data.price,
+      image: data.image
     })
     navigate('/')
   }
@@ -66,22 +60,19 @@ function ProductDetails() {
         <Link underline="hover" color="inherit" onClick={() => navigate("/")}>
           Página Inicial
         </Link>
-        <Link underline="hover" color="inherit" onClick={() => navigate("/")}>
-          {productType}
-        </Link>
-        <Typography color="text.primary">{productName}</Typography>
+        <Typography color="text.primary">{data.name}</Typography>
       </Breadcrumbs>
       <Container>
 
         <div>
           <Grid container spacing={2} sx={{ marginTop: "20px", marginBottom: "20px" }}>
             <Grid item md={4} sm={12}>
-              <img src={currentProductValues[0].image} alt={productName} style={{ width: "100%", height: "250px", objectFit: "cover" }} />
+              <img src={data.image} alt={data.name} style={{ width: "100%", height: "250px", objectFit: "cover" }} />
             </Grid>
             <Grid item md={8} sm={12}>
 
-              <h1>{productName}</h1>
-              <p>{`Valor unitário: R$ ${currentProductValues[0].price}`}</p>
+              <h1>{data.name}</h1>
+              <p>{`Valor unitário: R$ ${data.price}`}</p>
 
             </Grid>
           </Grid>
@@ -103,7 +94,7 @@ function ProductDetails() {
                 />
               </Grid>
               <Grid sm={4}>
-                <span>Total: R$ {currentProductValues[0].price * quantity}</span>
+                <span>Total: R$ {data.price * quantity}</span>
               </Grid>
               <Grid sm={12}>
                 <TextField

@@ -14,7 +14,7 @@ import Container from '@mui/material/Container';
 function ProductsList() {
     const { isLoading, error, data } = useQuery({
         queryKey: ["products"],
-        queryFn: () => fetch('http://localhost:3000/api/products').then(
+        queryFn: () => fetch('http://localhost:8000/api/categories').then(
             (res) => {
                 if (!res.ok) throw new Error(res);
                 else return res.json();
@@ -31,18 +31,17 @@ function ProductsList() {
     return (
         <main>
             <Container>
-
-                {data.productTypes.map((productType, productTypeIndex) => {
+                {data.map((productCategory) => {
                     return (
-                        <div key={productTypeIndex}>
-                            <h3>{productType.type}</h3>
+                        <div key={productCategory.id}>
+                            <h3>{productCategory.name}</h3>
                             <Grid container spacing={1} >
 
-                                {productType.products.map((product, productIndex) => {
+                                {productCategory.products.map((product) => {
                                     return (
-                                        <Grid item md={4} sm={6} key={''.concat(productTypeIndex, '-', productIndex)}>
+                                        <Grid item md={4} sm={6} key={`${productCategory.id}-${product.id}`}>
                                             <Card sx={{ width: "100%" }}>
-                                                <CardActionArea onClick={() => navigate(`/${productType.type}/${product.name}`)}>
+                                                <CardActionArea onClick={() => navigate(`/produtos/${product.id}`)}>
 
                                                     <CardMedia
                                                         component="img"

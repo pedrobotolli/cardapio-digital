@@ -54,11 +54,11 @@ function Cart() {
                         return (
                             <Grid container spacing={2} key={index}>
                                 <Grid item md={4} sm={12}>
-                                    <img src={item.image} alt={item.productName} style={{width: "100%", height: "200px", objectFit: "cover" }} />
+                                    <img src={item.image} alt={item.name} style={{width: "100%", height: "200px", objectFit: "cover" }} />
                                 </Grid>
                                 <Grid item md={6} sm={12}>
                                     <div style={{ display: "inline-block" }}>
-                                        <h2>{`${item.productType} - ${item.productName}`}</h2>
+                                        <h2>{`${item.name}`}</h2>
                                         <p>{`Quantidade: `}
                                             <IconButton aria-label="add" onClick={() => increaseItemQuantity(index)}>
                                                 <AddCircleIcon />

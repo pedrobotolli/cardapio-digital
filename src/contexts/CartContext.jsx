@@ -21,6 +21,7 @@ export const CartProvider = ({children}) => {
         setCart(cartCopy)
     }
 
+    
     function addToCart (itemToAdd) {
         let index = null
 
@@ -29,8 +30,7 @@ export const CartProvider = ({children}) => {
         }
 
         let itemFound = cart.filter((cartItem, itemIndex) => {
-            if(cartItem.productName === itemToAdd.productName && 
-                cartItem.productType === itemToAdd.productType &&
+            if(cartItem.productId === itemToAdd.productId &&
                 cartItem.additionalInfo === itemToAdd.additionalInfo) {
                     index = itemIndex
                     return cartItem
