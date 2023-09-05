@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
+import OrderStatus from '../OrderStatus';
 
 function OrderConfirmed() {
   const { orderId } = useParams()
@@ -55,17 +56,24 @@ function OrderConfirmed() {
           <Grid container spacing={2}>
             <Grid item sm={12}>
               <h1> Pedido {data.id}</h1>
+            </Grid>
+            <Grid item md={6}>
               <p>Nome: {data.ordererName}</p>
               <p>Endereço: {data.address}</p>
-              <p>Horário previsto para entrega: {format(Date.parse(data.deliveryTime),'p', {locale: ptBR })}</p>
+              <p>Horário previsto para entrega: <strong>{format(Date.parse(data.deliveryTime),'p', {locale: ptBR })}</strong></p>
             </Grid>
+            <Grid item md={6} sm={12}>
+              <p>Status do pedido:</p>
+              <OrderStatus currentStatus={data.orderStatus.id}/>
+              <p>{data.orderStatus.description}</p>
+            </Grid>
+            <Grid item sm={12}>
+                <h2> Itens do pedido: </h2>
+              </Grid>
           </Grid>
           {data.orderItems.map((item, index) => {
             return (
               <Grid container spacing={2} key={index}>
-                <Grid item sm={12}>
-                <h2> Itens do pedido: </h2>
-              </Grid>
                 <Grid item md={4} sm={12}>
                   <img src={item.product.image} alt={item.product.name} style={{ width: "100%", height: "200px", objectFit: "cover" }} />
                 </Grid>

@@ -32,15 +32,6 @@ function ProductDetails() {
 
   if (error) return 'An error has ocurred: ' + error.message
   
-  /*
-  let currentProductTypeValues = data.productTypes.filter(obj => obj.type === productType)
-
-  let currentProductValues = currentProductTypeValues[0].products.filter(obj => {
-    return obj.name === productName
-  })
-  console.log(currentProductValues)
-  */
-
   function handleSubmit(e) {
     e.preventDefault()
     addToCart({
@@ -91,6 +82,8 @@ function ProductDetails() {
                   onChange={(e) => setQuantity(e.target.value)}
                   style={{ width: "100%" }}
                   inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                  focused
+                  autoFocus
                 />
               </Grid>
               <Grid sm={4}>
