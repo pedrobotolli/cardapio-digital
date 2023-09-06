@@ -10,16 +10,12 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import Container from '@mui/material/Container';
+import {getAllCategories} from "../../queries"
 
 function ProductsList() {
     const { isLoading, error, data } = useQuery({
-        queryKey: ["products"],
-        queryFn: () => fetch('http://localhost:8000/api/categories').then(
-            (res) => {
-                if (!res.ok) throw new Error(res);
-                else return res.json();
-            }
-        )
+        queryKey: ["getAllCategories"],
+        queryFn: getAllCategories
     })
     const navigate = useNavigate()
 

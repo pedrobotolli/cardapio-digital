@@ -14,6 +14,7 @@ import Button from '@mui/material/Button';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import Grid from '@mui/material/Unstable_Grid2';
 import { Stack } from '@mui/material'
+import {getProduct} from "../../queries"
 
 function ProductDetails() {
   const navigate = useNavigate()
@@ -22,10 +23,8 @@ function ProductDetails() {
   const [quantity, setQuantity] = useState(0)
   const { productId } = useParams()
   const { isLoading, error, data } = useQuery({
-    queryKey: ["product"],
-    queryFn: () => fetch(`http://localhost:8000/api/products/${productId}`).then(
-      (res) => res.json()
-    )
+    queryKey: ["getProduct"],
+    queryFn: () => getProduct(productId)
   })
 
   if (isLoading) return <Loading />

@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import { useMutation } from '@tanstack/react-query';
+import { baseUrl } from '../../constants';
 
 function ConfirmOrder() {
     const navigate = useNavigate()
@@ -17,7 +18,7 @@ function ConfirmOrder() {
 
     const submitOrderMutation = useMutation({
         mutationFn: async () => {
-            const response = await fetch('http://localhost:8000/api/orders', {
+            const response = await fetch(`${baseUrl}/api/orders`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

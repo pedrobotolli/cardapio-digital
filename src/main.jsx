@@ -6,6 +6,8 @@ import ProductsList from './components/ProductsList';
 import ProductDetails from './components/ProductDetails';
 import ConfirmOrder from './components/ConfirmOrder';
 import OrderConfirmed from './components/OrderConfirmed';
+import ManageOrders from './components/ManageOrders';
+import ManageCategories from './components/ManageCategories';
 import Cart from './components/Cart';
 import {
   createBrowserRouter,
@@ -20,7 +22,6 @@ import { CartProvider } from './contexts/CartContext';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import { mcTheme } from './contexts/ThemeContext';
-
 
 const queryClient = new QueryClient()
 
@@ -49,6 +50,14 @@ const router = createBrowserRouter([
       {
         path: "/pedido-confirmado/:orderId",
         element: <OrderConfirmed />
+      },
+      {
+        path: "/admin/pedidos",
+        element: <ManageOrders />
+      },
+      {
+        path: "/admin/categorias",
+        element: <ManageCategories />
       }
     ]
   },

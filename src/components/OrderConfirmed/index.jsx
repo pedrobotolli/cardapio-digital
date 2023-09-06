@@ -10,28 +10,18 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import OrderStatus from '../OrderStatus';
+import OrderItems from '../OrderItems';
+import {getOrderById} from '../../queries'
 
 function OrderConfirmed() {
   const { orderId } = useParams()
   const navigate = useNavigate()
-  let [totalPrice, setTotalPrice] = useState()
 
-  const { isLoading, error, data } = useQuery({
-    queryKey: "order",
-    queryFn: async () => {
-      const response = await fetch(`http://localhost:8000/api/orders/${orderId}`)
-      const data = await response.json()
-      return data
-    }
+  const { isLoading, error, data, refetch } = useQuery({
+    queryKey: ["getOrderById"],
+    queryFn: () => getOrderById(orderId),
+    refetchInterval: 3000
   })
-
-  useEffect(() => {
-    if (data){
-      let totalPriceTemp = 0
-      data.orderItems.map(item => totalPriceTemp += (parseInt(item.product.price) * parseInt(item.quantity)))
-      setTotalPrice(totalPriceTemp)
-    }
-  }, [data])
 
   if (isLoading) return (<Loading />)
   if (error) return 'Aconteceu um erro: ' + error.message
@@ -53,47 +43,23 @@ function OrderConfirmed() {
           xs={12}
           md={12}
         >
-          <Grid container spacing={2}>
-            <Grid item sm={12}>
-              <h1> Pedido {data.id}</h1>
-            </Grid>
-            <Grid item md={6}>
-              <p>Nome: {data.ordererName}</p>
-              <p>Endereço: {data.address}</p>
-              <p>Horário previsto para entrega: <strong>{format(Date.parse(data.deliveryTime),'p', {locale: ptBR })}</strong></p>
-            </Grid>
-            <Grid item md={6} sm={12}>
-              <p>Status do pedido:</p>
-              <OrderStatus currentStatus={data.orderStatus.id}/>
-              <p>{data.orderStatus.description}</p>
-            </Grid>
-            <Grid item sm={12}>
-                <h2> Itens do pedido: </h2>
-              </Grid>
+
+          <Grid item sm={12}>
+            <h1> Pedido {data.id}</h1>
           </Grid>
-          {data.orderItems.map((item, index) => {
-            return (
-              <Grid container spacing={2} key={index}>
-                <Grid item md={4} sm={12}>
-                  <img src={item.product.image} alt={item.product.name} style={{ width: "100%", height: "200px", objectFit: "cover" }} />
-                </Grid>
-                <Grid item md={6} sm={12}>
-                  <div style={{ display: "inline-block" }}>
-                    <h3>{`${item.product.name}`}</h3>
-                    <p>{`Valor: R$ ${item.product.price}`}</p>
-                    <p>{`Quantidade: `}
-                      {item.quantity}
-                    </p>
-                    <p>{`Observações: ${item.additionalInfo}`}</p>
-                    <h5>Total Produto: R$ {item.product.price * item.quantity}</h5>
-                  </div>
-                </Grid>
-              </Grid>
-            )
-          })}
-          <Grid item md={12} xs={12}>
-            <h4>Total Geral: R$ {totalPrice}</h4>
+          <Grid item md={6}>
+            <p>Nome: {data.ordererName}</p>
+            <p>Endereço: {data.address}</p>
+            <p>Horário previsto para entrega: <strong>{format(Date.parse(data.deliveryTime), 'p', { locale: ptBR })}</strong></p>
           </Grid>
+          <Grid item md={6} sm={12}>
+            <p>Status do pedido:</p>
+            <OrderStatus currentStatus={data.orderStatus.id} currentOrderId={data.id} editable={false} refetch={refetch}/>
+            <p>{data.orderStatus.description}</p>
+          </Grid>
+
+          <OrderItems orderItems={data.orderItems} />
+          
         </Grid>
       </Container>
     </div>
