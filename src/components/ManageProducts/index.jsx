@@ -1,4 +1,4 @@
-import { getAllCategories } from '../../queries'
+import { getCategory } from '../../queries'
 import { useQuery, useMutation } from "@tanstack/react-query"
 import { useState } from 'react';
 import Container from '@mui/material/Container';
@@ -15,17 +15,18 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { baseUrl } from '../../constants';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-function ManageCategories() {
+function ManageProducts() {
     const [anchorEl, setAnchorEl] = useState(null);
-    const [targetCategoryId, setTargetCategoryId] = useState(null);
+    const [targetProductId, setTargetProductId] = useState(null);
     const open = Boolean(anchorEl);
     const navigate = useNavigate()
+    const {categoryId} = useParams()
 
     const { isLoading, error, data, refetch } = useQuery({
-        queryKey: ["getAllCategories"],
-        queryFn: getAllCategories,
+        queryKey: ["getCategory"],
+        queryFn: () => getCategory(categoryId),
         refetchOnMount: true,
         refetchOnWindowFocus: true
     })
@@ -47,19 +48,19 @@ function ManageCategories() {
     })
 
     const handleClick = (categoryId, event) => {
-        setTargetCategoryId(categoryId);
+        setTargetProductId(categoryId);
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
         setAnchorEl(null);
     };
     const handleDelete = async () => {
-        console.log(targetCategoryId);
-        deleteMutation.mutate(targetCategoryId);
+        console.log(targetProductId);
+        deleteMutation.mutate(targetProductId);
         handleClose();
     }
     const handleEdit = async () => {
-        navigate('/admin/categorias/editar/' + targetCategoryId)
+        navigate('/admin/categorias/editar/' + targetProductId)
         handleClose();
     }
 
@@ -76,33 +77,37 @@ function ManageCategories() {
                 </Link>
                 <Link underline="hover" color="inherit" onClick={() => navigate("/admin")}>
                     Admin
-                </Link>
-                <Typography color="text.primary">Categorias</Typography>
+                </Link>                
+                <Link underline="hover" color="inherit" onClick={() => navigate("/admin/categorias")}>
+                    Categorias
+                </Link>  
+                <Link underline="hover" color="inherit" onClick={() => navigate("/admin/categorias")}>
+                {data.name}
+                </Link>                   
+                <Typography color="text.primary">Produtos</Typography>
             </Breadcrumbs>
             <Container centered>
                 <h1>
-                    Gerenciar Categorias
-                    <IconButton edge="end" aria-label="add" onClick={() => navigate('/admin/categorias/nova')}>
+                    Gerenciar Produtos da Categoria {data.name}
+                    <IconButton edge="end" aria-label="add" onClick={() => navigate(`/admin/categorias/categoria/${categoryId}/produtos/novo`)}>
                         <AddIcon />
                     </IconButton>
                 </h1>
                 <List>
-                    {data.map((productCategory) => {
+                    {data.products.map((product) => {
                         return (
                             <ListItem
                                 secondaryAction={
-                                    <IconButton edge="end" aria-label="options" onClick={(e) => handleClick(productCategory.id, e)}>
+                                    <IconButton edge="end" aria-label="options" onClick={(e) => handleClick(product.id, e)}>
                                         <ArrowDropDownIcon />
                                     </IconButton>
                                 }
-                                key={productCategory.id}
+                                key={product.id}
                             >
-                                <Link underline="hover" color="inherit" onClick={() => navigate(`/admin/categorias/${productCategory.id}/produtos`)}>
-                                    <ListItemText
-                                        primary={productCategory.name}
-                                        secondary={productCategory.description}
-                                    />
-                                </Link>
+                                <ListItemText
+                                    primary={product.name}
+                                    secondary={product.description}
+                                />
                             </ListItem>
                         )
                     })}
@@ -124,4 +129,4 @@ function ManageCategories() {
     )
 }
 
-export default ManageCategories
+export default ManageProducts

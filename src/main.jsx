@@ -22,6 +22,9 @@ import { CartProvider } from './contexts/CartContext';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import { mcTheme } from './contexts/ThemeContext';
+import EditCategory from './components/EditCategory';
+import AdminMenu from './components/AdminMenu';
+import ManageProducts from './components/ManageProducts';
 
 const queryClient = new QueryClient()
 
@@ -52,12 +55,28 @@ const router = createBrowserRouter([
         element: <OrderConfirmed />
       },
       {
+        path: "/admin",
+        element: <AdminMenu />
+      },
+      {
         path: "/admin/pedidos",
         element: <ManageOrders />
       },
       {
         path: "/admin/categorias",
         element: <ManageCategories />
+      },
+      {
+        path: "/admin/categorias/nova",
+        element: <EditCategory />
+      },
+      {
+        path: "/admin/categorias/editar/:categoryId",
+        element: <EditCategory />
+      },
+      {
+        path: "/admin/categorias/:categoryId/produtos",
+        element: <ManageProducts />
       }
     ]
   },

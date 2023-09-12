@@ -10,7 +10,9 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import Container from '@mui/material/Container';
-import {getAllCategories} from "../../queries"
+import {getAllCategories} from "../../queries";
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
 
 function ProductsList() {
     const { isLoading, error, data } = useQuery({
@@ -26,7 +28,10 @@ function ProductsList() {
 
     return (
         <main>
-            <Container>
+            <Breadcrumbs aria-label="breadcrumb">
+                <Typography color="text.primary">Página Inicial</Typography>
+            </Breadcrumbs>
+            <Container centered>
                 {data.map((productCategory) => {
                     return (
                         <div key={productCategory.id}>

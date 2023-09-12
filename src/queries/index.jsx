@@ -47,3 +47,15 @@ export async function getAllCategories() {
     const data = await response.json();
     return data;
 }
+
+export async function getCategory(categoryId) {
+    const response = await fetch(`${baseUrl}/api/categories/${categoryId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }
+    });
+    const data = await response.json();
+    return data;
+}
