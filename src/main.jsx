@@ -8,6 +8,7 @@ import ConfirmOrder from './components/ConfirmOrder';
 import OrderConfirmed from './components/OrderConfirmed';
 import ManageOrders from './components/ManageOrders';
 import ManageCategories from './components/ManageCategories';
+import EditProduct from './components/EditProduct'
 import Cart from './components/Cart';
 import {
   createBrowserRouter,
@@ -77,6 +78,14 @@ const router = createBrowserRouter([
       {
         path: "/admin/categorias/:categoryId/produtos",
         element: <ManageProducts />
+      },
+      {
+        path: "/admin/categorias/:categoryId/produtos/novo",
+        element: <EditProduct />
+      },
+      {
+        path: "/admin/categorias/:categoryId/produtos/editar/:productId",
+        element: <EditProduct />
       }
     ]
   },

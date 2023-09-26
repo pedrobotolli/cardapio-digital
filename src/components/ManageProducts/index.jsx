@@ -60,7 +60,7 @@ function ManageProducts() {
         handleClose();
     }
     const handleEdit = async () => {
-        navigate('/admin/categorias/editar/' + targetProductId)
+        navigate(`/admin/categorias/${categoryId}/produtos/editar/${targetProductId}`)
         handleClose();
     }
 
@@ -89,7 +89,7 @@ function ManageProducts() {
             <Container centered>
                 <h1>
                     Gerenciar Produtos da Categoria {data.name}
-                    <IconButton edge="end" aria-label="add" onClick={() => navigate(`/admin/categorias/categoria/${categoryId}/produtos/novo`)}>
+                    <IconButton edge="end" aria-label="add" onClick={() => navigate(`/admin/categorias/${categoryId}/produtos/novo`)}>
                         <AddIcon />
                     </IconButton>
                 </h1>
